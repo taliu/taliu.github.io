@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title><![CDATA[踏柳]]></title>
+  <subtitle><![CDATA[简简单单就好]]></subtitle>
+  <link href="/atom.xml" rel="self"/>
+  <link href="http://taliu.github.io/"/>
+  <updated>2014-09-25T06:49:53.859Z</updated>
+  <id>http://taliu.github.io/</id>
+  
+  <author>
+    <name><![CDATA[taliu]]></name>
+    <email><![CDATA[taliu@outlook.com]]></email>
+  </author>
+  
+  <generator uri="http://zespia.tw/hexo/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[理解cookie]]></title>
+    <link href="http://taliu.github.io/2014/09/25/cookie/"/>
+    <id>http://taliu.github.io/2014/09/25/cookie/</id>
+    <published>2014-09-25T02:29:40.000Z</published>
+    <updated>2014-09-25T05:23:25.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="Asp-Net之Cookie">Asp.Net之Cookie</h1>
+<h2 id="添加cookie">添加cookie</h2>
+<h3 id="添加名为username的cookie">添加名为username的cookie</h3>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> cookie = <span class="keyword">new</span> HttpCookie(<span class="string">"username"</span>, <span class="string">"I am taliu"</span>);</div><div class="line"></div><div class="line"><span class="comment">//设置只有请求在/CookiesTest/test/路径下的页面才会带上这个cookie</span></div><div class="line">cookie.Path = <span class="string">"/CookiesTest/test/"</span>;</div><div class="line"></div><div class="line"><span class="comment">//设置过期时间[不设置的话默认为跟session一样的有效期（一般20分钟）</span></div><div class="line"><span class="comment">//一般关闭网页后会清除该cookie]</span></div><div class="line">cookie.Expires = DateTime.Now.AddHours(<span class="number">1</span>);</div><div class="line"></div><div class="line"><span class="comment">//再https连接下，请求页面才会带上此cookie</span></div><div class="line"><span class="comment">// cookie.Secure = true;</span></div><div class="line"></div><div class="line"><span class="comment">//指定 Cookie 是否可通过客户端脚本访问</span></div><div class="line"><span class="comment">//设置true的话，js是无法访问该cookie的但浏览器中依然可以手动修改或删除</span></div><div class="line">cookie.HttpOnly = <span class="literal">true</span>;</div><div class="line">    </div><div class="line"><span class="comment">//设置该cookie是属于.myDomian.com的，只有访问该域名的网站的网页才带上cookie</span></div><div class="line"><span class="comment">//cookie.Domain = ".myDomian.com";</span></div><div class="line"></div><div class="line">cookie.Values.Add(<span class="string">"mylove"</span>, <span class="string">"I love cookies"</span>);<span class="comment">//添加子键</span></div><div class="line">Response.Cookies.Add(cookie);</div></pre></td></tr></table></figure>
+
+<p>该cookie对应的浏览器响应头为</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Set-Cookie:<span class="variable">username=</span>I am taliu&<span class="variable">mylove=</span>I love cookies; <span class="variable">expires=</span>Sun, <span class="number">31</span>-Aug-<span class="number">2014</span> <span class="number">03</span>:<span class="number">46</span>:<span class="number">05</span> GMT; <span class="variable">path=</span>/CookiesTest/test/</div></pre></td></tr></table></figure>
+
+<p> 响应头部设置一个cookie的格式为：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="operator"><span class="keyword">Set</span>－Cookie: NAME=<span class="keyword">VALUE</span>；Expires=<span class="built_in">DATE</span>；Path=PATH；<span class="keyword">Domain</span>=DOMAIN_NAME；SECURE</span></div></pre></td></tr></table></figure>
+
+<p> 如果设置多个cookie,这响应头部的Set－Cookie字段对于的值为多个cookie值组成的字符串。下面是服务器返回name和age这两个cookie时的情况：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Set-Cookie : <span class="variable">name=</span>taliu; <span class="variable">expires=</span>Tue, <span class="number">02</span>-Sep-<span class="number">2014</span> <span class="number">05</span>:<span class="number">51</span>:<span class="number">28</span> GMT; <span class="variable">path=</span>/,<span class="variable">age=</span><span class="number">10</span>; <span class="variable">expires=</span>Tue, <span class="number">02</span>-Sep-<span class="number">2014</span> <span class="number">05</span>:<span class="number">51</span>:<span class="number">28</span> GMT; <span class="variable">path=</span>/</div></pre></td></tr></table></figure>
+
+<h3 id="添加名为age的cookie">添加名为age的cookie</h3>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//path默认根目录/，只要访问该网站的页面都会带上该cookie</span></div><div class="line">Response.Cookies.Add(<span class="keyword">new</span> HttpCookie(<span class="string">"age"</span>, <span class="string">"21"</span>));</div></pre></td></tr></table></figure>
+
+<p>该cookie对应的浏览器响应头为</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="operator"><span class="keyword">Set</span>-Cookie:age=<span class="number">21</span>;</span> path=/</div></pre></td></tr></table></figure>
+
+<h3 id="javascript获取cookie">javascript获取cookie</h3>
+<p>上面设置了名称为username 和age这两个cookie，其中username有子键<br>设置后，我用js读取到的是：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="built_in">document</span>.cookie)；</div><div class="line"><span class="comment">//结果为：</span></div><div class="line"><span class="comment">//username=I am taliu&mylove=I love cookies; age=21</span></div></pre></td></tr></table></figure>
+
+<p>可以看出，每个cookie用分号“;”分割开了，如果有子键，则键与键之间用&amp;号分割。<br>在客户端我们可以jquery.cookies.js插件来操作cookie,非常方便</p>
+<p>下次请求时,就会在头部加上前面设置的两个cookie，请求头部相应的值如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Cookie: <span class="variable">username=</span>I am taliu&<span class="variable">mylove=</span>I love cookies; <span class="variable">age=</span><span class="number">21</span></div></pre></td></tr></table></figure>
+
+<h2 id="删除cookie">删除cookie</h2>
+<h3 id="删除cookie就是让它过期">删除cookie就是让它过期</h3>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Response</span>.Cookies.Add(<span class="keyword">new</span> HttpCookie(<span class="string">"age"</span>,<span class="string">"12"</span>) { Expires=DateTime.<span class="built_in">Now</span> .AddDays(-<span class="number">1</span>)});</div></pre></td></tr></table></figure>
+
+<p>如果使用以下方式删除cookie是无效的：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Response .Cookies .<span class="keyword">Remove</span> (<span class="string">"age"</span>);</div></pre></td></tr></table></figure>
+
+<p>因为使用Response.Cookies.Remove方法删除cookie，只是在Response.Cookies 这个集合里删除，而不会给客户端发任何的删除信息，所有客户端也不会进行相应的删除。</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h1 id="Asp-Net之Cookie">Asp.Net之Cookie</h1>
+<h2 id="添加cookie">添加cookie</h2>
+<h3 id="添加名为username的cookie">添加名为username的cookie</h3>
+<figure cl]]>
+    </summary>
+    
+      <category term="cookie" scheme="http://taliu.github.io/tags/cookie/"/>
+    
+      <category term="asp.net" scheme="http://taliu.github.io/tags/asp-net/"/>
+    
+  </entry>
+  
+</feed>
